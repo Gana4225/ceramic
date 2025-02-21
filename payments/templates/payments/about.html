@@ -1,0 +1,50 @@
+{% extends 'payments/base.html' %}
+{% load static %}
+{% block content %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'payments/css/about.css' %}">
+{% endblock %}
+
+<section class="about-container">
+    <div class="about-content">
+        <h2>Welcome to Gana's Terracotta</h2>
+        <p>At Gana's Terracotta, we celebrate the beauty of handcrafted art. Our collection of premium terracotta products is designed to bring elegance, tradition, and a natural touch to your home and lifestyle.</p>
+
+        <div class="product-details">
+            <h3>Our Specialties</h3>
+            <p>We offer a variety of exquisite terracotta products, crafted with care and precision by skilled artisans. Our popular categories include:</p>
+            <ul>
+                <li><strong>Decorative Pots</strong> - Beautifully designed pots perfect for indoor and outdoor decoration.</li>
+                <li><strong>Sculptures</strong> - Unique handcrafted sculptures that add charm to any space.</li>
+                <li><strong>Jewelry</strong> - Elegant terracotta jewelry, lightweight and stylish for every occasion.</li>
+                <li><strong>Kitchenware</strong> - Traditional terracotta utensils that enhance both taste and presentation.</li>
+                <li><strong>Home Décor</strong> - Artistic terracotta pieces to give your home a warm and earthy feel.</li>
+            </ul>
+        </div>
+
+        <div class="payment-process">
+            <h3>Our Seamless Shopping Experience</h3>
+            <p>We’ve made it easy for you to shop for terracotta products hassle-free! Here’s how our simple process works:</p>
+            <ol>
+                <li>Browse our exclusive collection and select your favorite items.</li>
+                <li>Add products to your cart and proceed to our secure checkout.</li>
+                <li>Choose from multiple payment options for a smooth transaction.</li>
+                <li>Receive an order confirmation, and we’ll carefully pack and ship your products to your doorstep!</li>
+            </ol>
+            <p>Our seamless shopping experience ensures that you receive authentic, high-quality terracotta items with ease.</p>
+        </div>
+
+        <div class="shop-info">
+            <h3>Why Choose Gana's Terracotta?</h3>
+            <p>We are committed to delivering handcrafted excellence, preserving tradition, and supporting local artisans. Here’s why our customers love us:</p>
+            <ul>
+                <li><strong>Authentic Craftsmanship</strong> – Each product is handcrafted by skilled artisans with great attention to detail.</li>
+                <li><strong>Eco-Friendly</strong> – Our terracotta products are made from natural materials, promoting sustainability.</li>
+                <li><strong>Exclusive Designs</strong> – Unique, handcrafted pieces that you won’t find anywhere else.</li>
+                <li><strong>Reliable Delivery</strong> – Safe and timely delivery of your favorite products right to your home.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

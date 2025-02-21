@@ -1,0 +1,160 @@
+{% extends "payments/base.html" %}
+{% load static %}
+{% block content %}
+
+{% block extract_css %}
+<link rel="stylesheet" href="{% static 'payments/css/index.css' %}">{% endblock %}
+{% block title %}<title>Secure Checkout</title>
+{% endblock %}
+
+<div class="checkout-container">
+    <div class="checkout-card">
+        {% if payment is None %}
+            <div class="checkout-header">
+                <img src="{% static 'payments/images/' %}{{ img }}" alt="Product Image">
+                <h2>{{ nm }}</h2>
+                <p class="product-price">{{ price }} ₹</p>
+            </div>
+
+            <form method="POST" action="{% url 'home' %}" class="checkout-form">
+                {% csrf_token %}
+
+                <label>Full Name</label>
+                <input type="text" class="form-control" placeholder="Enter Your Name" name="nm" required>
+
+                <!-- Quantity Selector with Inline CSS -->
+                <label>Quantity</label>
+                <select name="quantity" class="form-control"
+                    style="color: red; padding: 10px; width: 100%; border-radius: 6px; border: 1px solid #ddd;
+                    font-size: 16px; background-color: #fff; cursor: pointer; appearance: none;
+                    -webkit-appearance: none; -moz-appearance: none; padding-right: 30px;
+                    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'%3E%3Cpath fill=\'%23999\' d=\'M5 8l5 5 5-5H5z\'/%3E%3C/svg%3E');
+                    background-repeat: no-repeat; background-position: right 10px center; background-size: 12px;">
+                    {% for i in qua %}
+                    <option value={{ i }} name="quantity">{{ i }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Hidden Fields -->
+                <input type="hidden" name="image" value="{{ img }}">
+                <input type="hidden" name="amt" value="{{ price }}">
+                <input type="hidden" name="name" value="{{ nm }}">
+                <input type="hidden" name="form_type" value="indexf">
+                <br><br>
+                <button type="submit" class="btn-checkout">Proceed to Payment</button>
+            </form>
+
+        {% else %}
+            <div class="checkout-header">
+                <h2 style="text-align:left">Checkout</h2>
+                <img src="{% static 'payments/images/' %}{{ img }}" alt="Product Image">
+            </div>
+
+            <div class="order-summary">
+                <p><strong>Product:</strong> {{xyz}}</p>
+                <p><strong>Name:</strong> {{ name }}</p>
+                <p><strong>Quantity:</strong> {{ qua }}</p>
+                <p><strong>Price Split</strong> {{qua}} x {{ price }}</p>
+                <p><strong>Total:</strong> {{ amt }}₹ (incl. all tax)</p>
+                <p><strong>We will bring your coffee shortly<br>
+                Please make payment</strong></p>
+
+            </div>
+
+        <style>
+
+            /* Order Summary Box */
+.order-summary {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.order-summary p {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #444;
+    line-height: 1.6;
+}
+
+.order-summary p strong {
+    color: #333;
+}
+
+/* Highlight price details */
+.order-summary p:nth-child(5) {
+    font-weight: bold;
+    color: #ff6f00;
+}
+
+/* Enhancing the quantity & price split details */
+.order-summary p:nth-child(3),
+.order-summary p:nth-child(4) {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Adding some visual separation */
+.order-summary p:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+/* Call-to-action emphasis */
+.order-summary p:last-child {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    color: #d84315;
+}
+</style>
+
+            <button id="customPayButton" class="btn-checkout">Pay Now</button>
+
+            <form id="paymentForm" method="POST" action="{% url 'success' %}">
+                {% csrf_token %}
+                <input type="hidden" name="payment_id" id="payment_id">
+                <input type="hidden" name="order_id" id="order_id">
+                <input type="hidden" name="utr" id="utr">
+                <input type="hidden" name="rand" value="{{ rand }}">
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+{% if payment %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById("customPayButton").addEventListener("click", function () {
+        var options = {
+            "key": "rzp_test_fdXm1LWL9qmt0N",
+            "amount": "{{ payment.amount }}",
+            "currency": "INR",
+            "order_id": "{{ payment.id }}",
+            "name": "Terracotta Shop",
+            "description": "Buying Terracotta({{xyz}})",
+            "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'payments/images/terracotta_plant_pot.jpg' %}",
+            "prefill": {
+
+            },
+            "theme": { "color": "lightgreen" },
+            "handler": function (response) {
+                document.getElementById("payment_id").value = response.razorpay_payment_id;
+                document.getElementById("order_id").value = response.razorpay_order_id;
+                document.getElementById("utr").value = response.razorpay_signature;
+                document.getElementById("paymentForm").submit();
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    });
+</script>
+
+{% endif %}
+{% endblock %}

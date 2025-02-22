@@ -2,7 +2,7 @@ coffee_data = [
     {
         "name": "Handcrafted Terracotta Vase",
         "image": "terracotta_vase.jpg",
-        "price": 500,
+        "price": 5,
         "description": """A beautifully handcrafted terracotta vase, perfect for home decor.
     Made from high-quality clay, it offers durability and an earthy charm.
     Its elegant design complements both modern and traditional interiors.
